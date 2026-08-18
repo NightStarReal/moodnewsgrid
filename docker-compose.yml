@@ -1,0 +1,27 @@
+services:
+  php:
+    image: "php:8.2-fpm"
+    volumes:
+      - "$PWD/php/site:/usr/src/myapp:rw"
+    environment:
+      - API_KEY_FILE=/run/secrets/api_key
+    secrets:
+      - api_key
+    working_dir: /usr/src/myapp
+    user: "1000:1000"
+    restart: unless-stopped
+
+  nginx:
+    image: "nginx:alpine"
+    ports:
+      - "80:8080"
+    volumes:
+      - "$PWD/php/site:/usr/src/myapp:rw"
+      - "$PWD/nginx/conf.d:/etc/nginx/conf.d"
+    depends_on:
+      - php
+    restart: unless-stopped
+
+secrets:
+   api_key:
+     file: php/secrets/api-key.txt

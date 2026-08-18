@@ -18,7 +18,12 @@ if ($newsId !== null) {
     }
 }
 else {
-    $newsData = $db->query('SELECT * FROM news ORDER BY id DESC')->fetchAll();
+    $query = $db->query('SELECT * FROM news ORDER BY id DESC');
+    $newsData = [];
+    while ($row = $query->fetchArray()) {
+        $newsData[] = $row;
+    }
+
     include 'main_page.php';
     main_page(newsData: $newsData);
 }

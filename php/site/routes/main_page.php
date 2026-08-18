@@ -17,7 +17,7 @@ function main_page(array $newsData) {
                 </div>
                 <div class="header-actions">
                     <button>Лента</button>
-                    <button class="primary-btn">Подписаться</button>
+                    <button class="primary-btn"><a href="/add-news">Добавить новость</a></button>
                 </div>
             </header>
             <div class="news-grid">
