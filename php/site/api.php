@@ -40,3 +40,20 @@ function api_factcheck(string $news): array {
     ];
     return api(data: $data);
 }
+
+function api_mooder(string $news, string $facts, string $mood): array {
+    $data = [
+        'model' => 'glm-4.5-flash',
+        'messages' => [
+            [
+                "role" => "system",
+                "content" => "You are a writer"
+            ],
+            [
+                "role" => "user",
+                "content" => "White the text in a set mood. You must preserve the facts, listed below. Answer the question in Russian. Mood: $mood.\nFacts: $facts.\nText: $news"
+            ]
+        ]
+    ];
+    return api(data: $data);
+}

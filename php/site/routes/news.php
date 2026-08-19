@@ -33,6 +33,42 @@ function news(array $foundNews) {
         $mood = 'boring';
     }
 
+    $full_text = "";
+    // get a mood
+    if ($mood != 'boring') {
+        $db = new SQLite3('news.db');
+        $stmt = $db->prepare("SELECT * FROM moods WHERE news_id = :news_id AND mood = :mood");
+        $stmt->bindParam(":news_id", $foundNews["id"], SQLITE3_INTEGER);
+        $stmt->bindParam(":mood", $mood, SQLITE3_TEXT);
+        $result = $stmt->execute()->fetchArray();
+
+        if ($result === false) {
+            include "api.php";
+            $api_result = api_mooder(facts: $foundNews["facts"], news: $foundNews["full_text"], mood: $mood);
+            $http_code = $api_result["http_code"];
+            $response = json_decode($api_result["response"], true);
+
+                if ($http_code === 200 || $http_code === 201) {
+                    $full_text = $response["choices"][0]["message"]["content"];
+                    $stmt = $db->prepare("INSERT INTO moods (news_id, mood, full_text) VALUES (:news_id, :mood, :full_text)");
+                    $stmt->bindValue(':news_id', $foundNews["id"], SQLITE3_INTEGER);
+                    $stmt->bindValue(':mood', $mood, SQLITE3_TEXT);
+                    $stmt->bindValue(':full_text', $full_text, SQLITE3_TEXT);
+                    $result = $stmt->execute();
+                } else {
+                    $full_text = "Произошла ошибка при задавании вопросов нейросети. Повторите попытку позже.";
+                }
+        }
+        else {
+            $full_text = $result["full_text"];
+        }
+
+    }
+    else {
+        $full_text = $foundNews["full_text"];
+    }
+
+
     $currentMood = $moodSettings[$mood];
 
     function moodLink($moodValue) {
@@ -101,7 +137,7 @@ function news(array $foundNews) {
                     </div>
 
                     <div class="single-content">
-                        <p><?php echo nl2br(htmlspecialchars($foundNews['full_text'])); ?></p>
+                        <p><?php echo nl2br(htmlspecialchars($full_text)); ?></p>
                     </div>
                 </div>
 
