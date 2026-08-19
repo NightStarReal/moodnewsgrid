@@ -65,12 +65,6 @@ header('Content-Type: text/html; charset=UTF-8');
                         required
                         rows="10"
                     ></textarea>
-                    <div class="char-counter">
-                        <span id="fullTextCounter">0</span> символов
-                    </div>
-                    <span class="hint">
-                        Поддерживается HTML-разметка (теги &lt;p&gt;, &lt;b&gt;, &lt;i&gt;, &lt;ul&gt;, &lt;li&gt; и др.)
-                    </span>
                 </div>
 
                 <div class="form-group">
