@@ -51,7 +51,7 @@ function api_mooder(string $news, string $facts, string $mood): array {
             ],
             [
                 "role" => "user",
-                "content" => "White the text in a set mood. You must preserve the facts, listed below. Answer the question in Russian. Mood: $mood.\nFacts: $facts.\nText: $news"
+                "content" => "White this text in a set mood. You must preserve the facts, listed below. Do not add * and ** as indicator of italic and bold. Answer the question in Russian. Mood: $mood.\nFacts: $facts.\nText: $news"
             ]
         ]
     ];
